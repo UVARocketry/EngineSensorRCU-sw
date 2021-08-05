@@ -1,0 +1,6 @@
+[submodule "libcan"]
+	path = libcan
+	url = https://github.com/VirginiaRocketry/libcan.git
+[submodule "libpicutil"]
+	path = libpicutil
+	url = https://github.com/VirginiaRocketry/libpicutil.git
