@@ -18,6 +18,8 @@
       <itemPath>libpicutil/time.h</itemPath>
       <itemPath>libpicutil/uart_debug.c</itemPath>
       <itemPath>libpicutil/uart_debug.h</itemPath>
+      <itemPath>libpicutil/leds.c</itemPath>
+      <itemPath>libpicutil/leds.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
