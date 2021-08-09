@@ -5,6 +5,7 @@
 build/
 debug/
 dist/
+nbproject/
 
 # Prerequisites
 *.d
