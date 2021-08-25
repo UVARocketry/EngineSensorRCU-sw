@@ -32,7 +32,7 @@ const uint8_t RCU_ID_LOCAL = RCU_ID_ENGINE_SENSOR_RCU;
  * 
  */
 
-uint16_t last_2Hz_time, last_10Hz_time, last_200Hz_time, last_hb_rx_time;
+uint16_t last_2Hz_time, last_10Hz_time, last_200Hz_time;
 
 uint8_t connected;
 
@@ -41,8 +41,6 @@ struct EngineSensorsA_t sensorsA;
 struct EngineSensorsB_t sensorsB;
 
 char msg[64];
-
-void on_can_rx(const struct can_msg_t *msg);
 
 uint8_t shutdown_req_flag;
 
@@ -59,8 +57,8 @@ void transmit_sensors() {
     //possible to use any pin for ADC channel! expand as required.
 
     //send as two packets on the bus
-    can_txq_push(ID_ENGINE_SENSORS_A, CAN_CONVERT(sensorsA));
-    can_txq_push(ID_ENGINE_SENSORS_B, CAN_CONVERT(sensorsB));
+    can_txq_push(CAN_ID_EngineSensorsA, CAN_CONVERT(sensorsA));
+    can_txq_push(CAN_ID_EngineSensorsB, CAN_CONVERT(sensorsB));
 }
 
 int main() {
@@ -71,7 +69,6 @@ int main() {
     leds_init();
     uart_init();
     adc_init();
-    can_rx_callback = &on_can_rx;
     can_init();
 
     while (1) {
@@ -87,7 +84,7 @@ int main() {
             last_200Hz_time = ms;
             leds_connected(connected); //blink LED to show connection status
         }
-        if (ms - last_10Hz_time > 10) {//10Hz
+        if (ms - last_10Hz_time > 100) {//10Hz
             last_10Hz_time = ms;
             connected = can_hb_check_connected(ms);
             if (!connected) { //when main RCU offline, do ADC conversion at much lower rate
@@ -99,7 +96,7 @@ int main() {
             //send a heartbeat msg
             hb.health = HEALTH_NOMINAL;
             hb.uptime_s = time_secs();
-            can_txq_push(ID_HEARTBEAT, CAN_CONVERT(hb));
+            can_txq_push(CAN_ID_Heartbeat, CAN_CONVERT(hb));
         }
     }
 }
